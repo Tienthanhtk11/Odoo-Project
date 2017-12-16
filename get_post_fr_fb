@@ -1,0 +1,26 @@
+import facebook
+import requests
+
+
+def some_action(post):
+
+    print(post['created_time'])
+    #print(post['message'])
+    #print(post['picture'])
+
+# Lấy token ở link dưới
+# here: https://developers.facebook.com/tools/explorer/
+access_token = 'EAACEdEose0cBAKYMqiJaZA44NF2JWJZAedwG2Yxh3ilNWzH4wmznxgOlLXZClBpjv7ZBZCtFTfqosS2OTLZCsbDs1jdCuTZA3Q2PP4q8xssHayZAkZCKZCku8ssgHf9ZCABtVAps1FVpZBFJ3BbcYMwQGsZA0bJhyyTZCYXduzusOS9nRHq00qv2arD2DtgR1JbaF3qLtUQdXoIuEV1wZDZD'
+#id này sau khi sử dụng tool ở link trên sẽ get được
+user = "1603076759928998"
+
+graph = facebook.GraphAPI(access_token)
+profile = graph.get_object(user)
+posts = graph.get_connections(profile['id'], 'posts')
+
+while True:
+    try:
+        [some_action(post=post) for post in posts['data']]
+        posts = requests.get(posts['paging']['next']).json()
+    except KeyError:
+        break
